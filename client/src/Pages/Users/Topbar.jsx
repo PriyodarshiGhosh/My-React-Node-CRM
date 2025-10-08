@@ -9,7 +9,7 @@ import CreateUser from "./CreateEmployee";
 import Filter from "./Filter";
 import { searchUserReducer } from "../../redux/reducer/user";
 
-const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
+const Topbar = ({ view, setView, setIsFiltered, isFiltered, onOpenCreateModal }) => {
 
   ///////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
   const { pathname } = useLocation();
@@ -119,6 +119,15 @@ const Topbar = ({ view, setView, setIsFiltered, isFiltered }) => {
                   }
                 />
               </FormControl>
+            </div>
+            <div>
+              <Tooltip title="Add New Client" placement="top" arrow>
+                <div onClick={onOpenCreateModal}>
+                  <button className="bg-primary-red hover:bg-red-400 transition-all text-white w-[44px] h-[44px] flex justify-center items-center rounded-full shadow-xl">
+                    <Add />
+                  </button>
+                </div>
+              </Tooltip>
             </div>
           </div>
         )}

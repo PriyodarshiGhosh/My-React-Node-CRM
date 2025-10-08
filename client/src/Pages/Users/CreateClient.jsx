@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createEmployee } from "../../redux/action/user";
-import { useNavigate } from "react-router-dom";
-import Topbar from "./Topbar";
+import { createClient } from "../../redux/action/user";
 import {
   Divider,
   Dialog,
@@ -11,33 +9,28 @@ import {
   Slide,
   DialogActions,
   TextField,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
 } from "@mui/material";
 import { PiNotepad, PiXLight } from "react-icons/pi";
-import { CFormSelect } from "@coreui/react";
-import { pakistanCities } from "../../constant";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const CreateUser = ({ open, setOpen, scroll }) => {
+const CreateClient = ({ open, setOpen, scroll }) => {
   //////////////////////////////////////// VARIABLES /////////////////////////////////////
   const { isFetching } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const initialEmployeeState = {
+  const initialClientState = {
     firstName: "",
     lastName: "",
     username: "",
     password: "",
     phone: "",
     email: "",
-  }
+  };
 
   //////////////////////////////////////// STATES /////////////////////////////////////
-  const [employeeData, setEmployeeData] = useState(initialEmployeeState);
+  const [clientData, setClientData] = useState(initialClientState);
   const [validationErrors, setValidationErrors] = useState({});
 
   //////////////////////////////////////// USE EFFECTS /////////////////////////////////////
@@ -45,7 +38,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
   //////////////////////////////////////// FUNCTIONS /////////////////////////////////////
   const validateForm = () => {
     const errors = {};
-    const { firstName, lastName, username, password, phone, email } = employeeData;
+    const { firstName, lastName, username, password, phone, email } = clientData;
 
     if (!firstName) errors.firstName = "First Name is required";
     if (!lastName) errors.lastName = "Last Name is required";
@@ -68,18 +61,18 @@ const CreateUser = ({ open, setOpen, scroll }) => {
     e.preventDefault();
     if (!validateForm()) return;
     
-    dispatch(createEmployee(employeeData, setOpen));
-    setEmployeeData(initialEmployeeState);
+    dispatch(createClient({ ...clientData, role: "client" }, setOpen));
+    setClientData(initialClientState);
     setValidationErrors({});
   };
 
   const handleChange = (field, value) => {
-    setEmployeeData((prevFilters) => ({ ...prevFilters, [field]: value, }));
+    setClientData((prevData) => ({ ...prevData, [field]: value }));
   };
 
   const handleClose = () => {
     setOpen(false);
-    setEmployeeData(initialEmployeeState);
+    setClientData(initialClientState);
     setValidationErrors({});
   };
 
@@ -95,7 +88,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
         maxWidth="sm"
         aria-describedby="alert-dialog-slide-description">
         <DialogTitle className="flex items-center justify-between">
-          <div className="text-sky-400 font-primary">Add New Employee</div>
+          <div className="text-sky-400 font-primary">Add New Client</div>
           <div className="cursor-pointer" onClick={handleClose}>
             <PiXLight className="text-[25px]" />
           </div>
@@ -104,7 +97,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
           <div className="flex flex-col gap-2 p-3 text-gray-500 font-primary">
             <div className="text-xl flex justify-start items-center gap-2 font-normal">
               <PiNotepad size={23} />
-              <span>Employee Detials</span>
+              <span>Client Details</span>
             </div>
             <Divider />
             <table className="mt-4">
@@ -114,7 +107,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                   <TextField
                     size="small"
                     fullWidth
-                    value={employeeData.firstName}
+                    value={clientData.firstName}
                     onChange={(e) => handleChange('firstName', e.target.value)}
                     error={!!validationErrors.firstName}
                     helperText={validationErrors.firstName}
@@ -127,7 +120,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                   <TextField
                     size="small"
                     fullWidth
-                    value={employeeData.lastName}
+                    value={clientData.lastName}
                     onChange={(e) => handleChange('lastName', e.target.value)}
                     error={!!validationErrors.lastName}
                     helperText={validationErrors.lastName}
@@ -140,7 +133,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                   <TextField
                     size="small"
                     fullWidth
-                    value={employeeData.username}
+                    value={clientData.username}
                     onChange={(e) => handleChange('username', e.target.value)}
                     error={!!validationErrors.username}
                     helperText={validationErrors.username}
@@ -154,7 +147,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                     size="small"
                     fullWidth
                     placeholder="Optional"
-                    value={employeeData.email}
+                    value={clientData.email}
                     onChange={(e) => handleChange('email', e.target.value)}
                     error={!!validationErrors.email}
                     helperText={validationErrors.email}
@@ -166,7 +159,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                 <td className="pb-4">
                   <TextField
                     type="password"
-                    value={employeeData.password}
+                    value={clientData.password}
                     onChange={(e) => handleChange("password", e.target.value)}
                     size="small"
                     fullWidth
@@ -181,7 +174,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
                   <TextField
                     type="number"
                     size="small"
-                    value={employeeData.phone}
+                    value={clientData.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                     fullWidth
                     error={!!validationErrors.phone}
@@ -209,8 +202,7 @@ const CreateUser = ({ open, setOpen, scroll }) => {
         </DialogActions>
       </Dialog>
     </div>
-
   );
 };
 
-export default CreateUser;
+export default CreateClient;
